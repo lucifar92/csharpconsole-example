@@ -1,2 +1,2 @@
 # csharpconsole-example
-This repository will provide .net fundamental console application source code using C#
+The Repository is for people who are looking for short-hand code for dotnet console application. It consist of basic program code of C#. 
