@@ -1,0 +1,40 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Data.SqlClient;
+using System.Data;
+using System.Data.Sql;
+
+namespace listado
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            listdata();
+          
+           
+        }
+
+        public static void listdata()
+        {
+            // List all the Records
+
+            SqlConnection con = new SqlConnection(@"Data Source=.\SQLEXPRESS;AttachDbFilename=|DataDirectory|\Database1.mdf;Integrated Security=True;User Instance=True");
+            con.Open();
+            SqlCommand cmd = new SqlCommand("SELECT * FROM std_tbl", con);
+            SqlDataReader sdr = cmd.ExecuteReader();
+            Console.WriteLine("Student ID  Student Name   Student No");
+            Console.WriteLine();
+            while (sdr.Read())
+            {
+                Console.WriteLine(sdr.GetValue(0) + "\t" + sdr.GetValue(1) + "\t" + sdr.GetValue(2) + "\t");
+
+            }
+            con.Close();
+        }
+
+       
+    }
+}
