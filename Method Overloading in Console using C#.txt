@@ -1,0 +1,26 @@
+using System;
+namespace Method_Overloading_Demo
+{
+ 	class two
+ 	{
+		 public void Perimeter(int squareside)
+ 		{
+			 Console.WriteLine("Perimeter of Square is : " + (4*squareside));
+ 		}
+		public void Perimeter(int a, int b)
+ 		{
+		 	Console.WriteLine("Perimeter of Rectangle is : " + (2*(a+b)));
+		}
+		public void Perimeter(int sidea, double sideb, double sidec)
+ 		{ 
+	 		Console.WriteLine("Perimeter of Triangle is :"+(sidea+sideb+sidec));
+ 		}
+		static void Main()
+ 		{
+		 	two t = new two();
+ 			t.Perimeter(8);
+	 		t.Perimeter(10, 20);
+	 		t.Perimeter(10, 21.3, 30.23);
+ 		}
+ 	}
+}
