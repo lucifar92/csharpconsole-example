@@ -1,0 +1,42 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+namespace Partial_Class_demo
+{
+ partial class sample
+ {
+ 	public void name(string Name)
+ 	{
+ 		Console.WriteLine("Your Name is : " + Name);
+ 	}
+ 	public void address(string Address)
+ 	{
+
+	 Console.WriteLine("Your Address is : " +Address);
+ 	}
+ }
+ partial class sample
+ {
+ 	public void age(int Age)
+ 	{
+		 Console.WriteLine("Your Age  is : " + Age);
+	 }
+	 public void hobbies(string hobby1, string hobby2)
+ 	{
+		Console.WriteLine("Your Hobbies are : " + hobby1 + "and " + hobby2);
+ 	}
+ }
+ class Program
+ {
+ 	static void Main(string[] args)
+ 	{
+ 		sample s = new sample();
+		s.name("John");
+		s.address("NewYork");
+ 		s.age(30);
+		s.hobbies("Basketball", "Football");
+ 	}
+ }
+
+}
