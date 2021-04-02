@@ -1,0 +1,43 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Data.SqlClient;
+using System.Data;
+
+namespace insdemo
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Enter Your ID");
+            int Sid = Convert.ToInt32(Console.ReadLine());
+
+            Console.WriteLine("Enter your Name");
+            string Sname = Console.ReadLine();
+
+            Console.WriteLine("Enter Your City");
+            string Scity = Console.ReadLine();
+
+            string str = @"Data Source=.\SQLEXPRESS;AttachDbFilename=c:\users\nilesh\documents\visual studio 2010\Projects\insdemo\insdemo\Database1.mdf;Integrated Security=True;User Instance=True";
+
+            try
+            {
+                SqlConnection con = new SqlConnection(str);
+                con.Open();
+
+                string query = "INSERT into Student_tbl(Sid,Sname,Scity)VALUES('" + Sid + "','" + Sname + "','" + Scity + "')";
+                SqlCommand cmd = new SqlCommand(query, con);
+                cmd.ExecuteNonQuery();
+                Console.WriteLine("Inserted");
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+            }
+           
+        }
+    }
+}
