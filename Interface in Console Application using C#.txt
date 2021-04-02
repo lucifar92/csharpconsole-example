@@ -1,0 +1,36 @@
+using System;
+namespace inheritance_demo1
+{
+ 	//Interface - Multiple Inheritance
+	 interface A
+ 	{
+		 void test(); // Only declaration
+ 	}
+	interface B
+ 	{
+ 		void test1(); // Only declaration
+ 	}
+	public class C : A, B
+ 	{
+		public void test()
+ 		{
+			 // implementation of Interface A
+			 Console.WriteLine("This is from Interface A");
+ 		}
+		public void test1()
+ 		{
+		 	// implementation of Interface B
+			Console.WriteLine("This is from Interface B");
+ 		}
+	class Program
+ 	{
+		static void Main()
+		{
+		 	C cc = new C();
+			cc.test();
+ 			cc.test1();
+ 		}
+ 	}
+ }
+
+}
