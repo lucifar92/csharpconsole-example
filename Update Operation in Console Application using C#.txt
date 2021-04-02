@@ -1,0 +1,37 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Data.SqlClient;
+using System.Data;
+
+namespace update_demo
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Enter Student ID");
+            int StdID = Convert.ToInt32(Console.ReadLine());
+
+            Console.WriteLine("Enter Student Name");
+            string StdName = Console.ReadLine();
+
+            Console.WriteLine("Enter Student City");
+            string StdCity = Console.ReadLine();
+
+            string str = @"Data Source=.\SQLEXPRESS;AttachDbFilename=c:\users\nilesh\documents\visual studio 2010\Projects\update_demo\update_demo\Database1.mdf;Integrated Security=True;User Instance=True";
+
+            SqlConnection con = new SqlConnection(str);
+
+            con.Open();
+
+            string query = "UPDATE std_tbl set StdID = '" + StdID + " ', StdName = '" + StdName + "',StdCity = '" + StdCity + "' WHERE StdID = '" + StdID + "'";
+
+            SqlCommand cmd = new SqlCommand(query, con);
+            cmd.ExecuteNonQuery();
+            con.Close();
+
+        }
+    }
+}
