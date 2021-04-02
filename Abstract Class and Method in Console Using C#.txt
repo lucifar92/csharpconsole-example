@@ -1,0 +1,44 @@
+using System;
+namespace Abstract_class_demo
+abstract class Program
+{
+public void Name(string fname, string lname)
+{
+	//Non Abstract method
+	Console.WriteLine("FirstName is : " + fname + " and Last Name is : " + lname);
+	Console.WriteLine();
+}
+public void Address(string Address1, string Address2)
+{
+	//Non Abstract method
+	Console.WriteLine("Address 1 is : " + Address1 + " and Address 2 is : " + 	Address2);
+	Console.WriteLine();
+}
+	//Abstract Method
+	public abstract void hobbies(string hobby1, string hobby2);
+	public abstract void Number(int Number1); //Abstract Method}
+	class child : Program{
+public override void hobbies(string hobby1, stringhobby2)
+{
+	//Implementation of Abstract Method
+	Console.WriteLine("My 1st Hobby is : " + hobby1 + " and 2nd Hobby is : " + hobby2);
+	Console.WriteLine();
+}
+public override void Number(int Number1)
+{
+	//Implementation of Abstract Method
+	Console.WriteLine("Your Addition is : " + Number1);
+	Console.WriteLine();
+}
+static void Main()
+{
+	child c = new child();
+	c.Name("Kelvin","Jonathan");
+	c.Address("Boston","LosAngeles");
+	c.hobbies("Football", "Basketball");
+	c.Number(12345678);
+}
+     }
+}
+
+
