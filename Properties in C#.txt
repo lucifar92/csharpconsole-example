@@ -1,0 +1,192 @@
+Properties: Properties is a flexible mechanism where you can read and write the members or values
+of a private field.
+
+**
+They have special methods known as accessors, so they have get accessors and set accessors methods
+where get accessors will return the value and set accessors will assign the value. The keyword “Value”
+is used to assign the value of a property.
+
+
+** 
+The question is, how to access these private members that are declared under some class, as the scope
+of private modifier is within one class, one thing we can do is to change the modifier to public but if
+we do that than anyone can access our field member and can possibly change the values. Another
+idea is, we can create methods and can access the field member from there, but it also comes with
+one hindrance - we have to repeatedly call the method just for one field member which leads to
+performance degradation. To deal with such scenario, we have properties. Properties is similar to that
+of getter and setter methods in C++. In C# properties have get () and set () methods where get() is
+used to return the value of the field, whereas the set() is used to assign some value using “value”
+keyword to the field.
+
+
+Read Only Property
+------------------
+
+using System;
+namespace property
+{
+ 	class sample
+ 	{
+ 		private int ID = 101;
+ 		private string Name = "John";
+ 		private float Pay = 5000.202f;
+
+ 		public int idproperty
+ 		{
+ 			get{return ID;}
+ 			set{ID = value;}
+ 		}
+ 		public string nameproperty
+ 		{
+ 			get{return Name;}
+ 			set{Name = value;}
+ 		}
+ 		public float payproperty
+ 		{
+ 			get{return Pay;}
+ 			set{Pay = value;}
+ 		}
+ 	}
+
+ class Program
+ {
+ 	static void Main(string[] args)
+ 	{
+ 		sample s = new sample();
+ 		Console.WriteLine("This is my EMP ID :"+ s.idproperty);
+ 		Console.WriteLine("Employee Name : " +s.nameproperty);
+ 		Console.WriteLine("Employee Salary : " +s.payproperty);
+ 	}
+    }
+}
+
+
+Read and Write Property
+-----------------------
+
+class sample
+ {
+ 	private int ID = 101;
+ 	private string Name = "John";
+ 	private float Pay = 5000.202f;
+
+ 	public int idproperty
+ 	{
+ 		get{return ID;}
+ 		set{ID = value;}
+ 	}
+ 	public string nameproperty
+ 	{
+ 		get{return Name;}
+ 		set{Name = value;}
+ 	}
+ 	public float payproperty
+ 	{
+ 		get{return Pay;}
+ 		set{Pay = value;}
+ 	}
+ }
+
+class Program
+ {
+ 	static void Main(string[] args)
+ 	{
+ 		sample s = new sample();
+ 		Console.WriteLine("Employee ID is :" + s.idproperty);
+ 		Console.WriteLine("Employee Name is:"+ s.nameproperty);
+ 		Console.WriteLine("Employee Salary is:"+s.payproperty);
+ 		Console.WriteLine();
+ 		Console.WriteLine("---- ASSIGN NEW VALUES ----");
+ 		Console.WriteLine();
+ 		s.idproperty = 102;
+ 		s.nameproperty = "Smith";
+ 		s.payproperty = 60000.2f;
+ 		Console.WriteLine("Employee ID is:" + s.idproperty);
+ 		Console.WriteLine("Employee Name is:"+ s.nameproperty);
+ 		Console.WriteLine("Employee Salary is:"+s. payproperty);
+ 	}
+ }
+
+Static Property
+---------------
+
+static class sample
+ {
+ 	private static int ID ;
+ 	private static string Name ;
+ 	private static float Pay ;
+
+ 	public static int idproperty
+ 	{
+ 		get{return ID;}
+ 		set{ID = value;}
+ 	}
+ 	public static string nameproperty
+ 	{
+ 		get{return Name;}
+ 		set{Name = value;}
+ 	}
+ 	public static float payproperty
+ 	{
+ 		get{return Pay;}
+ 		set{Pay = value;}
+ 	}
+ }
+ class Program
+ {
+ 	static void Main(string[] args)
+ 	{
+ 		sample.idproperty = 102;
+ 		sample.nameproperty = "Smith";
+ 		sample.payproperty = 60000.2f;
+ 		Console.WriteLine("Employee ID is :"+sample.idproperty);
+ 		Console.WriteLine("Employee Nameis:"+sample.nameproperty);
+ 		Console.WriteLine("Employee Salary is:"+sample.payproperty);
+ 	}
+ }
+}
+
+Property with Condition
+------------------------
+
+
+class sample
+ {
+ 	private int ID;
+ 	public int intproperty
+ 	{
+ 		set
+ 		{
+ 			if (value <= 0)
+ 			{
+ 				throw new Exception("ID shouldn’t be 0");
+ 			}
+ 			ID = value;
+  		}
+ 		get { return ID; }
+ 	}
+ }
+ class Program
+ {
+ 	static void Main(string[] args)
+ 	{
+ 		sample s = new sample();
+ 		Console.WriteLine(s.intproperty = 0) ;
+ 	}
+ }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
