@@ -1,0 +1,388 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+using System.Data;
+using System.Data.SqlClient;
+using System.Data.Sql;
+
+namespace Student_information_demo_TC1
+{
+    class Program
+    {
+
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Welcome to the Student Information System");
+            Console.WriteLine("Press Enter to Continue...");
+            Console.ReadLine();
+            Console.Clear();
+
+            logindetails();
+        }
+        public static void logindetails()
+        {
+            Console.WriteLine("Login Details");
+            Console.WriteLine("Enter your Username");
+            string user = Console.ReadLine();
+            Console.WriteLine("Enter your Password");
+            string pass = Console.ReadLine();
+
+            try
+            {
+                string str = @"Data Source=.\SQLEXPRESS;AttachDbFilename=c:\users\nilesh\documents\visual studio 2010\Projects\Student_information_demo_TC1\Student_information_demo_TC1\Database1.mdf;Integrated Security=True;User Instance=True";
+
+                SqlConnection con = new SqlConnection(str);
+
+                string query = "SELECT * FROM login WHERE username like @user and password=@pass";
+                SqlCommand cmd = new SqlCommand(query, con);
+
+                cmd.Parameters.AddWithValue("@user", user);
+                cmd.Parameters.AddWithValue("@pass", pass);
+
+                SqlDataAdapter sda = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                sda.Fill(ds);
+
+                bool logincheck = ((ds.Tables.Count > 0) && (ds.Tables[0].Rows.Count > 0));
+
+                if (logincheck)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Successfully Login");
+
+                    selection(); // If successfully login, then go to the selection method to select the option - Insert, Update, Delete and View.
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("Invalid Details");
+                    Console.Clear();
+                    logindetails(); // if Not Successfully login, come back to logindetail method, to write username and password again.
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);       
+            }
+
+        }
+
+        public static void selection()
+        {
+            Console.WriteLine("Choose the Prefferable Option to Interact with SIS..");
+            Console.WriteLine("\t\t\t\t1.Insert\n\t\t\t\t2.Delete\n\t\t\t\t3.Update\n\t\t\t\t4.Display\n\t\t\t\t5.Exit");
+
+            ConsoleKeyInfo menu; // whatever key you will press from 1.2.3.4.5 it will saved inside menu variable.
+            menu = Console.ReadKey(true); // It will display the key you presses in the console window.
+
+            switch (menu.KeyChar)
+            {
+                case '1':
+                    Insert();
+                    Console.ReadLine();
+                    break;
+                case '2':
+                    Delete();
+                    Console.Clear();
+                    break;
+                case '3':
+                    Update();
+                    break;
+                case '4':
+                    Console.Clear();
+                    view();      // it will display the data
+                    Console.ReadLine();
+                    Console.Clear();
+                    selection();
+                    break;
+                case '5':
+                    Console.Clear();
+                    Environment.Exit(0); 
+                    break;
+            }
+        }
+
+        public static void view()
+        {
+            try
+            {
+                string str = @"Data Source=.\SQLEXPRESS;AttachDbFilename=C:\Users\Nilesh\Documents\Visual Studio 2010\Projects\Student_information_demo_TC1\Student_information_demo_TC1\Database1.mdf;Integrated Security=True;User Instance=True";
+
+                SqlConnection con = new SqlConnection(str);
+                con.Open(); // connection is open
+                string viewquery = "SELECT * FROM student";
+                SqlCommand cmd = new SqlCommand(viewquery,con);
+                SqlDataReader rdr = cmd.ExecuteReader();
+                Console.WriteLine("RollNo FirstName LastName FatherName Email Phone Physics Chemistry Maths");
+                Console.WriteLine("----------------------------------------------------------------");
+                while (rdr.Read())
+                {
+                    Console.Write(rdr.GetValue(0) + "\t" + rdr.GetValue(1) + "\t" + rdr.GetValue(2) + "\t" + rdr.GetValue(3) + "\t" + rdr.GetValue(4) + "\t" + rdr.GetValue(5) + "\t" + rdr.GetValue(6) + "\t" + rdr.GetValue(7) + "\t" + rdr.GetValue(8) + "\t");
+                }
+                con.Close();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);   
+            }
+        }
+        public static void Update()
+        {
+            Console.WriteLine("Enter the Roll No to Update");
+            int rollno = Convert.ToInt32(Console.ReadLine());
+            try
+            {
+                string str = @"Data Source=.\SQLEXPRESS;AttachDbFilename=C:\Users\Nilesh\documents\visual studio 2010\Projects\Student_information_demo_TC1\Student_information_demo_TC1\Database1.mdf;Integrated Security=True;User Instance=True";
+
+                SqlConnection con = new SqlConnection(str);
+
+                string q1 = "SELECT * FROM student WHERE rollno like @rollno";
+                SqlCommand cmd = new SqlCommand(q1, con);
+                cmd.Parameters.AddWithValue("@rollno", rollno);
+                SqlDataAdapter sda = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                sda.Fill(ds);
+
+                bool modifycheck = ((ds.Tables.Count > 0) && (ds.Tables[0].Rows.Count > 0));
+
+                if (modifycheck)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Roll No :" + rollno);
+                    con.Open();
+                    String q = "SELECT * FROM student WHERE rollno like @rollno";
+                    cmd = new SqlCommand(q, con);
+                    cmd.Parameters.AddWithValue("@rollno", rollno);
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        Console.Write("--------------------------------------------------");
+                        Console.WriteLine("\n\t\t\t\tFirstName : " + rdr.GetValue(1) + "\n\t\t\t\tLastName : " + rdr.GetValue(2) + "\n\t\t\t\tFatherName : " + rdr.GetValue(3) + "\n\t\t\t\tEmail : " + rdr.GetValue(4) + "\n\t\t\t\tPhone : " + rdr.GetValue(5) + "\n\t\t\t\tPhysics : " + rdr.GetValue(6) + "\n\t\t\t\tChemistry : " + rdr.GetValue(7) + "\n\t\t\t\tMaths : " + rdr.GetValue(8));
+
+                    }
+                    con.Close();
+                    // Update information will be taken here
+
+                    Console.WriteLine("Enter the New First Name");
+                    string fname = Console.ReadLine();
+
+                    Console.WriteLine("Enter the New Last Name");
+                    string lname = Console.ReadLine();
+
+                    Console.WriteLine("Enter the New Father Name");
+                    string fathername = Console.ReadLine();
+
+                    Console.WriteLine("Enter the New Email Id");
+                    string email = Console.ReadLine();
+
+                    Console.WriteLine("Enter the New Phone");
+                    int phone = Convert.ToInt32(Console.ReadLine());
+
+                    Console.WriteLine("Enter the New Physics Marks");
+                    int physics = Convert.ToInt32(Console.ReadLine());
+
+                    Console.WriteLine("Enter the New Chemistry Marks");
+                    int chemistry = Convert.ToInt32(Console.ReadLine());
+
+                    Console.WriteLine("Enter the New Maths Marks");
+                    int maths = Convert.ToInt32(Console.ReadLine());
+
+                    con.Open();
+
+                    string Updatequery = "UPDATE student set fname = '" + fname + "',lname='" + lname + "',fathername='" + fathername + "',email='" + email + "',phone='" + phone + "',physics='" + physics + "',chemistry='" + chemistry + "',maths='" + maths + "' WHERE rollno='" + rollno + "'";
+
+                    cmd = new SqlCommand(Updatequery, con);
+                    cmd.ExecuteNonQuery(); // It will Check that any modification in database happens or not.
+                    con.Close();
+
+                    Console.WriteLine("Update Operation Successfully Done");
+                    Console.WriteLine("Press Enter to get Back to main Menu");
+                    Console.ReadLine();
+                    Console.Clear();
+
+                    selection();
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("No Roll No Found in the Database");
+                    Update();
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+            }
+            
+        }
+
+        public static void Delete()
+        {
+
+            Console.WriteLine("Enter the Roll No.");
+            int rollno = Convert.ToInt32(Console.ReadLine());  
+  
+            // Based on the Roll No you provide, all details of that roll no should be shown.
+
+            try
+            {
+                string str = @"Data Source=.\SQLEXPRESS;AttachDbFilename=C:\Users\Nilesh\Documents\Visual Studio 2010\Projects\Student_information_demo_TC1\Student_information_demo_TC1\Database1.mdf;Integrated Security=True;User Instance=True";
+
+                SqlConnection con = new SqlConnection(str);
+
+                string simplequery = "SELECT * FROM student WHERE rollno like @rollno";
+                SqlCommand cmd = new SqlCommand(simplequery, con);
+                cmd.Parameters.AddWithValue("@rollno", rollno);
+
+                SqlDataAdapter sda = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                sda.Fill(ds);
+
+                bool checkdelete = ((ds.Tables.Count > 0) && (ds.Tables[0].Rows.Count > 0));
+
+                if (checkdelete)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Roll No:" + rollno);
+
+                    // We will display the data according to the Roll provided by the user.
+
+                    con.Open();
+                    string q1 = "SELECT * FROM student WHERE rollno like @rollno";
+                    cmd = new SqlCommand(q1, con);
+                    cmd.Parameters.AddWithValue("@rollno", rollno);
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+
+                        Console.WriteLine("\n\t\t\t\tFirstName : "+rdr.GetValue(1)+"\n\t\t\t\tLastName :"+rdr.GetValue(2)+"\n\t\t\t\tFatherName: " +rdr.GetValue(3)+"\n\t\t\t\tEmail : "+rdr.GetValue(4)+"\n\t\t\t\tPhone : "+rdr.GetValue(5)+"\n\t\t\t\tPhysics :" +rdr.GetValue(6)+"\n\t\t\t\tChemistry : "+rdr.GetValue(7)+"\n\t\t\t\tMaths : " +rdr.GetValue(8));
+
+                    }
+                    con.Close();
+
+                    Console.WriteLine("Do You need to Delete (Y/N)");
+                    string confirm = Console.ReadLine();
+
+                    if (confirm == "Y")
+                    {
+
+                        con.Open();
+                        string deletequery = "DELETE FROM student WHERE rollno = '" + rollno + "'";
+                        cmd = new SqlCommand(deletequery,con);
+                        cmd.ExecuteNonQuery(); // Database is modified or not.
+                        con.Close();
+
+                        Console.WriteLine("Delete Operation Successfully Done");
+                        Console.WriteLine("Press any Key to get Back to main menu");
+                        Console.ReadLine();
+                        Console.Clear();
+
+                        selection();
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine("No Roll No Found");
+                        
+                   }
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.Write(ex.Message);
+            }
+
+        }
+
+        public static void Insert()
+        {
+            // Insert Data inside the Database -- student table
+
+            Console.Clear();
+            Console.WriteLine("Insert Student Information");
+
+            // while inserting we first have to check the same roll no doestnot exist in the               database.
+
+            Console.WriteLine("Enter the Roll No.");
+            int rollno = Convert.ToInt32(Console.ReadLine());
+
+            string str = @"Data Source=.\SQLEXPRESS;AttachDbFilename=C:\Users\Nilesh\Documents\Visual Studio 2010\Projects\Student_information_demo_TC1\Student_information_demo_TC1\Database1.mdf;Integrated Security=True;User Instance=True";
+
+            SqlConnection con = new SqlConnection(str);
+            string query = "SELECT * FROM student WHERE rollno like @rollno";
+            SqlCommand cmd = new SqlCommand(query, con);
+
+            cmd.Parameters.AddWithValue("@rollno", rollno);
+            SqlDataAdapter sda = new SqlDataAdapter(cmd);
+            DataSet ds = new DataSet();
+            sda.Fill(ds);
+
+            bool check = ((ds.Tables.Count > 0) && (ds.Tables[0].Rows.Count > 0));
+
+            if (check)
+            {
+                Console.WriteLine("Roll No. Already Exist");
+                Console.WriteLine("Press Any Key to get back to Main Menu");
+                Console.ReadLine();
+                Console.Clear();
+                selection();
+            }
+
+            Console.WriteLine("Enter the First Name");
+            string fname = Console.ReadLine();
+
+            Console.WriteLine("Enter the Last Name");
+            string lname = Console.ReadLine();
+
+            Console.WriteLine("Enter the Father Name");
+            string fathername = Console.ReadLine();
+
+            Console.WriteLine("Enter the Email Id");
+            string email = Console.ReadLine();
+
+            Console.WriteLine("Enter the Phone");
+            int phone = Convert.ToInt32(Console.ReadLine());
+
+            Console.WriteLine("Enter the Physics Marks");
+            int physics = Convert.ToInt32(Console.ReadLine());
+
+            Console.WriteLine("Enter the Chemistry Marks");
+            int chemistry = Convert.ToInt32(Console.ReadLine());
+
+            Console.WriteLine("Enter the Maths Marks");
+            int maths = Convert.ToInt32(Console.ReadLine());
+
+            try
+            {
+                con = new SqlConnection(str);
+                con.Open();
+                string insertquery = "INSERT INTO student(rollno,fname,lname,fathername,email,phone,physics,chemistry,maths)VALUES('"+rollno+"','"+fname+"','"+lname+"','"+fathername+"','"+email+"','"+phone+"','"+physics+"','"+chemistry+"','"+maths+"')";
+
+                cmd = new SqlCommand(insertquery,con);
+                int i = cmd.ExecuteNonQuery();
+                Console.WriteLine(i); // it will show that the database is affected or modified or not.
+                Console.WriteLine("Data Inserted Successfully");
+                Console.WriteLine("Press Enter to get back to Main Menu");
+                Console.ReadLine();
+                Console.Clear();
+                selection();      
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+            }
+            
+
+        }
+        
+    }
+}
