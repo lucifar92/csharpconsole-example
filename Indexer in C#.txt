@@ -1,0 +1,54 @@
+Indexer – The complexity arises when we deal with private array in a class, and we want to call that in another class, properties doesn’t give you the suitable way to access those array in another class,
+moreover, there is no way we can use any parameters in properties, and therefore there is a need for another mechanism which can resolve all these constraints. There comes – Indexers. 
+
+Indexers are the smart array or virtual array that allows you to access the private members using an index, which is a parameter that we pass in indexer.
+
+Syntax of Indexer declaration-
+
+<Access_Modifier> <Return_type> this [argument List]
+{
+get {return var ;}
+set {var = value ;}
+}
+------------------------------------------------------
+Public int this [int index]
+{
+get { return ID [index];}
+set { ID[index] = value;}
+}
+
+
+
+using System;
+namespace indexer_demo
+{
+ 	public class sample
+ 	{
+ 		private float[] percentage = new float[13]
+ 		{
+ 			66.2F, 76.79F, 46.55F, 36.99F, 88.18F,
+ 			71.32F, 95.92F, 82.18F, 79.21F, 54.55F,
+ 			66.56F, 98.23F, 74.23F
+ 		};
+ 		public float this [ int index]
+ 		{
+ 			get { return percentage[index]; }
+ 			set { percentage[index] = value; }
+ 		}
+ }
+ class Program
+ {
+ 	static void Main(string[] args)
+	{
+ 		sample s = new sample();
+ 		Console.WriteLine("----GET OPERATION----");
+ 		for (int i = 1; i < 13; i++)
+ 		{
+ 			Console.WriteLine ("My percentage in {0} std was {1} %", i , s[i]);
+ 		}
+ 		Console.WriteLine("----SET OPERATION -----");
+ 		s[10] = 90.02F;
+ 		Console.WriteLine("My percentage in 10 std was {0} % ", s[10]);
+ 	}
+ }
+}
