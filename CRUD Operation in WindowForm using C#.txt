@@ -1,0 +1,142 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Data.SqlClient;
+using System.Text;
+using System.Windows.Forms;
+
+namespace WindowsFormsApplication3
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+        SqlConnection con = new SqlConnection(@"Data Source=.\SQLEXPRESS;AttachDbFilename=|DataDirectory|\Database1.mdf;Integrated Security=True;User Instance=True");
+
+        public int sid;
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            // At the time of form load - show all the details from the database in datagridview.
+            getdetails();
+
+        }
+
+        private void getdetails()
+        {
+            SqlCommand cmd = new SqlCommand("Select * from tbl_std", con);
+            DataTable dt = new DataTable();
+            con.Open();
+            SqlDataReader dr = cmd.ExecuteReader();
+            dt.Load(dr);
+            con.Close();
+            dataGridView1.DataSource = dt;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            // Insert Operation
+            if (Isvalid())
+            {
+                SqlCommand cmd = new SqlCommand("INSERT INTO tbl_std VALUES(@name,@city)", con);
+                cmd.CommandType = CommandType.Text;
+                cmd.Parameters.AddWithValue("@name", textBox1.Text);
+                cmd.Parameters.AddWithValue("@city", textBox2.Text);
+                con.Open();
+                cmd.ExecuteNonQuery();
+                con.Close();
+                MessageBox.Show("Data is Inserted");
+                getdetails();
+                clearing();
+               
+            }
+        }
+
+        private bool Isvalid()
+        {
+            // Validation to our Textboxes
+            if (textBox1.Text == string.Empty)
+            {
+                MessageBox.Show("Required", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            return true; // if is valid then only insert.
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            clearing(); // clear the content, once insert, update and delete.
+        }
+
+        private void clearing()
+        {
+            textBox1.Clear();
+            textBox2.Clear();
+        }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Selecting a specific cell from gridview.
+            sid = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells[0].Value);
+            textBox1.Text = dataGridView1.SelectedRows[0].Cells[1].Value.ToString();
+            textBox2.Text = dataGridView1.SelectedRows[0].Cells[2].Value.ToString();
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            // Update operation
+
+            if (sid > 0)  // ID should be greater than 1 otherwise select appropriate ID in else
+            {
+                SqlCommand cmd = new SqlCommand("UPDATE tbl_std SET Name=@name, City=@city WHERE ID = @id", con);
+                cmd.CommandType = CommandType.Text;
+                cmd.Parameters.AddWithValue("@name", textBox1.Text);
+                cmd.Parameters.AddWithValue("@city", textBox2.Text);
+                cmd.Parameters.AddWithValue("@id", this.sid);
+                con.Open();
+                cmd.ExecuteNonQuery();
+                con.Close();
+                MessageBox.Show("Data is Updated");
+                getdetails();
+                clearing();
+            }
+            else
+            {
+                MessageBox.Show("ID should be greater than 0");
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            // Delete Operation
+            if (sid > 0)
+            {
+                SqlCommand cmd = new SqlCommand("DELETE FROM tbl_std WHERE ID = @id", con);
+                cmd.CommandType = CommandType.Text;
+                cmd.Parameters.AddWithValue("@id", this.sid);
+                con.Open();
+                cmd.ExecuteNonQuery();
+                con.Close();
+                MessageBox.Show("Selected Row is Deleted");
+                getdetails();
+                clearing();
+            }
+            else
+            {
+                MessageBox.Show("ID should be greater than 0");
+            }
+
+        }
+
+        
+
+       
+    }
+}
